@@ -10,3 +10,7 @@ libraryDependencies ++= Seq(
 scalaVersion := "2.10.3"
 
 ScalariformSupport.formatSettings
+
+scalacOptions ++= Seq(
+  "-encoding", "utf8", "-unchecked", "-deprecation", "-feature", "-language:_"
+)
