@@ -3,12 +3,13 @@ package net.virtualvoid.rescue
 import spray.json.{ RootJsonReader, RootJsonFormat, DefaultJsonProtocol, JsonFormat }
 import scala.concurrent.Future
 import spray.httpx.marshalling.Marshaller
-import net.virtualvoid.rescue.HelpMe.withMyImplicits
 import spray.http.{ BodyPart, HttpForm }
 
 //JsonOutput
 
 class TestImplicit {
+  import net.virtualvoid.rescue.HelpMe.withMyImplicits
+
   //implicitly[JsonFormat[Seq[String]]]
   import spray.httpx.SprayJsonSupport._
   import scala.concurrent.ExecutionContext.Implicits.global

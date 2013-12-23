@@ -19,7 +19,7 @@ object Render {
       val what = Option(info.whatImplicit).filter(_.nonEmpty).map(stripPrefixes).map(" @ "+).getOrElse("")
       val extra = if (info.missingImplicit.isEmpty) {
         val idx = extraInfos.indexOf(info)
-        " " + asterisks(idx)
+        if (idx >= 0) " " + asterisks(idx) else ""
       } else ""
 
       s" $RED$target$RESET$what$extra"
