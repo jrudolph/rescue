@@ -33,6 +33,7 @@ object Analysis {
       //println(s"'$message' didn't match")
       None
   }
+  // FIXME: unify nodes with identical target type but different implicit
   def reconstructSearchTree(search: ImplicitSearch): Tree = {
     case class ChildParent(info: ProblemInfo, child: Option[String], target: String)
 
