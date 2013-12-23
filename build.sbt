@@ -10,6 +10,3 @@ libraryDependencies ++= Seq(
 scalaVersion := "2.10.3"
 
 ScalariformSupport.formatSettings
-
-Revolver.settings
-//scalacOptions in (Test, compile) += "-Xlog-implicits"
