@@ -76,7 +76,7 @@ ToResponseMarshaller[Future[User]]              <- the root implicit missing als
      +- MarshallerM[Future] @ mMarshaller
        +- ExecutionContext @ futureMarshallerM
        
-       TestImplicit.scala: could not find implicit value for parameter marshaller: spray.httpx.marshalling.ToResponseMarshaller[scala.concurrent.Future[TestImplicit.this.User]]
+TestImplicit.scala: could not find implicit value for parameter marshaller: spray.httpx.marshalling.ToResponseMarshaller[scala.concurrent.Future[TestImplicit.this.User]]
      complete(retrieveUser())
                           ^
 ```
