@@ -46,10 +46,6 @@ object ImplicitsMacros {
       }
     }
     c.abort(c.enclosingPosition, "")
-
-    c.universe.reify {
-      null.asInstanceOf[T]
-    }
   }
 
   def problemRank(p: ProblemInfo) = (p.message, p.whatImplicit)
