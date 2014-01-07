@@ -63,6 +63,24 @@ provide an implicit `ExecutionContext`. Et voilà your code compiles.
 
 ## FAQ
 
+#### Can you explain the tree display?
+
+Yes. Here's the error tree again with more explanations inline:
+
+```
+ToResponseMarshaller[Future[User]]              <- the root implicit missing also mentioned in the error message
+   +- ExecutionContext @ futureMarshaller       <- `@ futureMarshaller` means this implicit was missing when trying to use the value `futureMarshaller` as an implicit of the parent type
+   +- Marshaller[Future[User]] @ liftMarshaller
+     +- RootJsonWriter[Future[User]] @ sprayJsonMarshaller <- other possible (but unlikely) implicit values that would solve this implicit resolution
+     +- ExecutionContext @ futureMarshaller
+     +- MarshallerM[Future] @ mMarshaller
+       +- ExecutionContext @ futureMarshallerM
+       
+       TestImplicit.scala: could not find implicit value for parameter marshaller: spray.httpx.marshalling.ToResponseMarshaller[scala.concurrent.Future[TestImplicit.this.User]]
+     complete(retrieveUser())
+                          ^
+```
+
 #### How does it work?
 
 One word: macros.
@@ -104,3 +122,5 @@ Probably, here's a list of possible future improvements
  * provide a database with known implicits and solutions how to provide them
  * using the database provide a heuristic that guides you which implicit value you should look for first
  * provide information with a modern kind of UI which supports higher information density than text in a console window
+ * try known implicit providers to fix gaps that cannot be found using the current approach (e.g. when the import to `SprayJsonSupport` is missing)
+ * include successful parts of implicit resolution into the tree
