@@ -68,7 +68,7 @@ provide an implicit `ExecutionContext`. Et voilà your code compiles.
 Yes. Here's the error tree again with more explanations inline:
 
 ```
-ToResponseMarshaller[Future[User]]              <- the root implicit missing also mentioned in the error message
+ToResponseMarshaller[Future[User]]              <- the missing implicit at the root (also mentioned in the error message)
    +- ExecutionContext @ futureMarshaller       <- `@ futureMarshaller` means this implicit was missing when trying to use the value `futureMarshaller` as an implicit of the parent type
    +- Marshaller[Future[User]] @ liftMarshaller
      +- RootJsonWriter[Future[User]] @ sprayJsonMarshaller <- other possible (but unlikely) implicit values that would solve this implicit resolution
