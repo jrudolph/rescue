@@ -65,6 +65,42 @@ provide an implicit `ExecutionContext`. Et voilà your code compiles.
 
 #### How does it work?
 
-## Future improvements
+One word: macros.
+
+#### One word is not an answer. So, how does it work exactly ?
+
+Well, I hoped to get away with just saying "macros" which sounds like a proper solution - even more if packaged
+into a library.
+
+Alas, the "solution" is really a hack. Here's a non-exhaustive list of methods used to collect the information:
+  * use a macro that never returns as a simple door into the compiler 
+  * use reflection to access and modify compiler internals not presented in the macro API
+  * fetch error information by intercepting error reporting methods
+  * "parse" error message with regular expressions
+  * reverse engineer `@implicitNotFound` messages with regular expressions to get back at the original types
+  * parse and shorten identifiers with regular expressions
+  * build a tree of errors by matching the string representation of types in error messages
+
+#### Why isn't the Scala compiler providing this kind of information?
+
+I don't know. I guess many of those hacks I had to do are caused by missing infrastructure in the compiler.
+With this infrastructure missing, maybe it was hard imagining a solution. So, maybe this can be a prototype
+for better implicit error reporting in the compiler itself.
+
+Improving infrastructure could mean:
+ * providing vital information for solving an implicit resolution problem only behind a flag which prints information
+   regardless of whether I'm currently interested or not (why report anything if implicit resolution was successful?)
+ * provide a better model for resolving implicits in general, currently it seems the compiler tries an implicit by putting it into the target position and then re-types the code in question which in turn may trigger subsequent implicit resolutions, the information about what goes wrong inside is only transported as the side-effect of reporting the error when `-Xlog-implicits` is turned on
+ * when reporting errors don't turn identifiers or types into strings
+ * don't even report particular error _messages_ as strings, if an error _message_ had an identity itself you could
+   provide more information for it on the web
+ * `@implicitNotFound` is nice but can mask details of implicit resolution errors
+ 
+
+#### This is not a solution but merely a better presentation of information. Fixing implicits is still hard. Couldn't you do better?
+
+Probably, here's a list of possible future improvements
 
  * provide a database with known implicits and solutions how to provide them
+ * using the database provide a heuristic that guides you which implicit value you should look for first
+ * provide information with a modern kind of UI which supports higher information density than text in a console window
