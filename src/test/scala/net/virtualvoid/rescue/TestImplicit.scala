@@ -1,31 +1,27 @@
 package net.virtualvoid.rescue
 
-import spray.json.{ RootJsonReader, RootJsonFormat, DefaultJsonProtocol, JsonFormat }
+import spray.json.{DefaultJsonProtocol, JsonFormat}
 import scala.concurrent.Future
-import spray.httpx.marshalling.Marshaller
-import spray.http.{ BodyPart, HttpForm }
-
-//JsonOutput
 
 class TestImplicit {
-  import net.virtualvoid.rescue.HelpMe.withMyImplicits
+  // remove comment to enable analysis
+  // import net.virtualvoid.rescue.HelpMe.withMyImplicits
 
-  //implicitly[JsonFormat[Seq[String]]]
   import spray.httpx.SprayJsonSupport._
-  import scala.concurrent.ExecutionContext.Implicits.global
+  // remove comment to fix
+  // import scala.concurrent.ExecutionContext.Implicits.global
   import spray.json.DefaultJsonProtocol._
 
-  trait Gustav
-  implicit val xyz: JsonFormat[Gustav] = null
+  trait Banana
+  implicit val xyz: JsonFormat[Banana] = null
 
+  // comment out to fix ambiguous implicits error
   object Abcd extends DefaultJsonProtocol
-  //import Abcd._
-  //implicitly[Marshaller[Future[Seq[Gustav]]]]
-
-  //implicit val x: Option[BodyPart] ⇒ Gustav = null
+  import Abcd._
 
   import spray.routing.Directives._
-  formFields('x.as[Gustav]) { (t) ⇒
-    ???
-  }
+
+  def x: Future[Seq[Banana]] = null
+
+  complete(x)
 }
