@@ -18,17 +18,18 @@ object Analysis {
   val DefaultParameterMsg = """could not find implicit value for parameter [^:]+: (.*)$""".r
   val DefaultViewMsg = """No implicit view available from (.*)\.$""".r
   val ExecutionContextMsg = "Cannot find an implicit ExecutionContext, either require one yourself or import ExecutionContext.Implicits.global"
+  val ExecutionContextMsg2 = "Cannot find an implicit ExecutionContext, either import scala.concurrent.ExecutionContext.Implicits.global or use a custom one"
   val RootJsonWriterMsg = """Cannot find RootJsonWriter or RootJsonFormat type class for (.*)$""".r
   val RootJsonReaderMsg = """Cannot find RootJsonReader or RootJsonFormat type class for (.*)$""".r
 
   /** Extract target types from well-known error messages (from @implicitNotFound) */
   def missingImplicit(message: String): Option[String] = message match {
-    case ExecutionContextMsg      ⇒ Some("scala.concurrent.ExecutionContext")
-    case DefaultEvidenceMsg(tpe)  ⇒ Some(tpe)
-    case DefaultParameterMsg(tpe) ⇒ Some(tpe)
-    case DefaultViewMsg(tpe)      ⇒ Some(tpe)
-    case RootJsonWriterMsg(tpe)   ⇒ Some(s"spray.json.RootJsonWriter[$tpe]")
-    case RootJsonReaderMsg(tpe)   ⇒ Some(s"spray.json.RootJsonReader[$tpe]")
+    case ExecutionContextMsg | ExecutionContextMsg2 ⇒ Some("scala.concurrent.ExecutionContext")
+    case DefaultEvidenceMsg(tpe)                    ⇒ Some(tpe)
+    case DefaultParameterMsg(tpe)                   ⇒ Some(tpe)
+    case DefaultViewMsg(tpe)                        ⇒ Some(tpe)
+    case RootJsonWriterMsg(tpe)                     ⇒ Some(s"spray.json.RootJsonWriter[$tpe]")
+    case RootJsonReaderMsg(tpe)                     ⇒ Some(s"spray.json.RootJsonReader[$tpe]")
     case _ ⇒
       //println(s"'$message' didn't match")
       None
