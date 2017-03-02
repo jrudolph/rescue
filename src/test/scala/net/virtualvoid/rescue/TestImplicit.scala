@@ -5,7 +5,7 @@ import scala.concurrent.Future
 
 class TestImplicit {
   // remove comment to enable analysis
-  // import net.virtualvoid.rescue.HelpMe.withMyImplicits
+  import net.virtualvoid.rescue.HelpMe.withMyImplicits
 
   import spray.httpx.SprayJsonSupport._
   // remove comment to fix

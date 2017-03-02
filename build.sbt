@@ -1,13 +1,21 @@
 libraryDependencies ++= Seq(
-  "org.specs2" %% "specs2" % "2.2.2" % "test",
-  "org.scala-lang" % "scala-reflect" % "2.10.5" % "provided",
-  "org.scala-lang" % "scala-compiler" % "2.10.5" % "provided",
-  "com.typesafe.akka" %% "akka-actor" % "2.2.3" % "test",
-  "io.spray" %% "spray-json" % "1.2.5" % "test",
-  "io.spray" % "spray-routing" % "1.2.0" % "test"
+  //"org.specs2" %% "specs2" % "2.2.2" % "test",
+  "com.typesafe.akka" %% "akka-actor" % "2.4.17" % "test",
+  "io.spray" %% "spray-json" % "1.3.3" % "test",
+  "io.spray" % "spray-routing" % "1.2.3" % "test"
 )
 
-scalaVersion := "2.10.5"
+libraryDependencies := {
+  val scalaV = scalaVersion.value
+
+  libraryDependencies.value ++
+  Seq(
+    "org.scala-lang" % "scala-reflect" % scalaV % "provided",
+    "org.scala-lang" % "scala-compiler" % scalaV % "provided"
+  )
+}
+
+scalaVersion := "2.11.8"
 
 ScalariformSupport.formatSettings
 

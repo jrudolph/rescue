@@ -17,4 +17,3 @@ pomExtra :=
                            "scm:git:git@github.com:jrudolph/rescue.git",
                            "jrudolph", "Johannes Rudolph")
 
-useGpg := true

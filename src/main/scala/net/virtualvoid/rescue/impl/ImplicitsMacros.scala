@@ -3,7 +3,7 @@ package impl
 
 import scala.language.experimental.macros
 
-import scala.reflect.macros.{ TypecheckException, Context }
+import scala.reflect.macros.{TypecheckException, Context}
 import scala.tools.nsc.reporters.Reporter
 import scala.reflect.internal.util.Position
 import scala.util.control.NonFatal
@@ -30,19 +30,20 @@ object ImplicitsMacros {
     runWithPrinter(c)(Render.rootCausesTree(withAnsi = false))
 
   def runWithPrinter[T: c.WeakTypeTag](c: Context)(render: ImplicitSearch ⇒ String): c.Expr[T] = {
-    val tpe = c.openImplicits.head._1
+    //val tpe = c.openImplicits.head.pt
+    println(s"Looking for pre: ${c.openImplicits.head.pre} pt: ${c.openImplicits.head.pt}")
 
     val result = new Analyzer(c).run
-    if (c.openImplicits.size <= 1 && result.nonEmpty) {
+    if ( /*c.openImplicits.size <= 1 &&*/ result.nonEmpty) {
       val search = result.head
       val text =
         try render(search)
         catch {
           case NonFatal(e) ⇒ e.printStackTrace(); "failed"
         }
-      if (!alreadyShown(c.enclosingPosition -> text)) {
+      if (!alreadyShown(c.enclosingPosition → text)) {
         c.echo(c.universe.NoPosition, text)
-        alreadyShown += c.enclosingPosition -> text
+        alreadyShown += c.enclosingPosition → text
       }
     }
     c.abort(c.enclosingPosition, "")
@@ -56,7 +57,7 @@ object ImplicitsMacros {
     field
   }
   val info0M = {
-    val method = classOf[Reporter].getDeclaredMethods.find(_.getName == "info0").get
+    val method = classOf[scala.reflect.internal.Reporter].getDeclaredMethods.find(_.getName == "info0").get
     method.setAccessible(true)
     method
   }
@@ -65,7 +66,7 @@ object ImplicitsMacros {
 
   class Analyzer(val c: Context) {
     def run = {
-      val tpe = c.openImplicits.head._1 //c.weakTypeTag[T]
+      val tpe = c.openImplicits.head.pt //c.weakTypeTag[T]
 
       //println("Was called " + c.openImplicits.size + " " + c.openMacros.size + " for type " + tpe)
       //if (c.openImplicits.size > 1)
@@ -101,9 +102,14 @@ object ImplicitsMacros {
               case MessageFormat(what, forT, HasMatchingSymbolFormat(error)) ⇒
                 // TODO: check if excluding all "type mismatches" makes sense
                 if (!error.startsWith("type mismatch")) HasMatchingSymbolError(what, forT, error)
-                else UnknownProblem(msg)
+                else {
+                  println(s"Unknown error '$error'")
+                  UnknownProblem(msg)
+                }
               case MessageFormat(what, forT, error) ⇒ OtherError(what, forT, error)
-              case x                                ⇒ UnknownProblem(x)
+              case x ⇒
+                println(s"Couldn't parse problem: '$x'")
+                UnknownProblem(x)
             }
           problems ::= p
         }

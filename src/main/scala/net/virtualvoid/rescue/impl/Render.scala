@@ -16,7 +16,7 @@ object Render {
       import tree.info
       import TextTools.stripPrefixes
       val target = stripPrefixes(info.missingImplicit.getOrElse(info.forWhichType))
-      val what = Option(info.whatImplicit).filter(_.nonEmpty).map(stripPrefixes).map(" @ "+).getOrElse("")
+      val what = Option(info.whatImplicit).filter(_.nonEmpty) /*.map(stripPrefixes)*/ .map(" @ "+).getOrElse("")
       val extra = if (info.missingImplicit.isEmpty) {
         val idx = extraInfos.indexOf(info)
         if (idx >= 0) " " + asterisks(idx) else ""
